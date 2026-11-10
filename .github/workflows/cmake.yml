@@ -35,6 +35,14 @@ jobs:
       id: conan
       uses: turtlebrowser/get-conan@main
 
+    - name: Cache Conan dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.conan
+        key: ${{ runner.os }}-conan-${{ hashFiles('conan.lock', 'conanfile.txt', 'conanfile.py') }}
+        restore-keys: |
+          ${{ runner.os }}-conan-
+
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/_build -S ${{github.workspace}} -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=${{github.workspace}}/build.props/conan_provider.cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
